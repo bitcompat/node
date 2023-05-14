@@ -1,0 +1,127 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_package:
+    name: Build package - Node.JS ${{ matrix.version.version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        version:
+          - version: 20.1.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+            latest: true
+            revision: 1
+          - version: 19.9.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+            latest: false
+            revision: 1
+          - version: 18.16.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+            latest: false
+            revision: 1
+          - version: 17.9.1
+            latest: false
+            revision: 1
+          - version: 16.20.0
+            latest: false
+            revision: 1
+          - version: 15.14.0
+            latest: false
+            revision: 1
+          - version: 14.21.3
+            latest: false
+            revision: 1
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - uses: actions/github-script@v6
+        id: version-tags
+        env:
+          VERSION: '${{ matrix.version.version }}'
+          REVISION: '${{ matrix.version.revision }}'
+        with:
+          result-encoding: string
+          script: |
+            const { REVISION: revision, VERSION: version } = process.env;
+            const [ major, minor, patch ] = version.split('.').filter(V => '' !== V);
+            
+            return `
+            ${major}.${minor}.${patch}-bullseye-r${revision}
+            ${major}.${minor}.${patch}-bullseye
+            ${major}.${minor}.${patch}
+            ${major}.${minor}-bullseye
+            ${major}.${minor}
+            `;
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@main
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          driver-opts: |
+            image=moby/buildkit:v0.10.6
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: docker_meta
+        name: Extract docker image metadata
+        uses: docker/metadata-action@v4.4.0
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            public.ecr.aws/bitcompat/${{ github.event.repository.name }}
+          tags: |
+            ${{ matrix.version.latest && 'latest' || '' }}
+            ${{ steps.version-tags.outputs.result }}
+
+      - name: Build and Push container images
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            NODE_VERSION=${{ matrix.version.version }}
+          push: true
+          context: .
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          cache-from: type=gha,scope=node-${{ matrix.version.version }}
+          cache-to: type=gha,mode=max,scope=node-${{ matrix.version.version }}
+
+      - name: Sign image with a key
+        run: |
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${TAGS}
+        env:
+          TAGS: ${{ steps.docker_meta.outputs.tags }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
