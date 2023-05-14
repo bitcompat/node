@@ -62,6 +62,7 @@ jobs:
             ${major}.${minor}.${patch}
             ${major}.${minor}-bullseye
             ${major}.${minor}
+            ${major}
             `;
 
       - name: Install Cosign
