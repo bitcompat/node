@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 ARG NODE_VERSION
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.11
 
 FROM bitnami/minideb:bullseye as node_build_base
 
