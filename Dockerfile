@@ -69,6 +69,7 @@ ENV APP_VERSION=$NODE_VERSION \
     BITNAMI_APP_NAME=node \
     BITNAMI_IMAGE_VERSION="${NODE_VERSION}-prod-debian-11" \
     PATH="/opt/bitnami/node/bin:/opt/bitnami/python/bin:$PATH" \
+    LD_LIBRARY_PATH=/opt/bitnami/python/lib/ \
     OS_ARCH=$TARGETARCH \
     OS_FLAVOUR="debian-11" \
     OS_NAME="linux"
