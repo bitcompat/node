@@ -13,25 +13,13 @@ jobs:
     strategy:
       matrix:
         version:
-          - version: 20.1.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 20.3.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: true
-            revision: 1
-          - version: 19.9.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
-            latest: false
             revision: 1
           - version: 18.16.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
-          - version: 17.9.1
-            latest: false
-            revision: 1
-          - version: 16.20.0
-            latest: false
-            revision: 1
-          - version: 15.14.0
-            latest: false
-            revision: 1
-          - version: 14.21.3
+          - version: 16.20.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
 
