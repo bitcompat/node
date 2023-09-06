@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         version:
-          - version: 20.5.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 20.6.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: true
             revision: 1
           - version: 18.17.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
