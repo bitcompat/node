@@ -36,6 +36,20 @@
       "matchDatasources": ["docker"],
       "rangeStrategy": "replace",
       "stabilityDays": 1
+    },
+    {
+      "matchPackageNames": [
+        "nodejs/node"
+      ],
+      "matchCurrentVersion": "^20",
+      "allowedVersions": "<21"
+    },
+    {
+      "matchPackageNames": [
+        "nodejs/node"
+      ],
+      "matchCurrentVersion": "^18",
+      "allowedVersions": "<19"
     }
   ]
 }
