@@ -48,10 +48,10 @@ jobs:
             const [ major, minor, patch ] = version.split('.').filter(V => '' !== V);
             
             return `
-            ${major}.${minor}.${patch}-bullseye-r${revision}
-            ${major}.${minor}.${patch}-bullseye
+            ${major}.${minor}.${patch}-bookworm-r${revision}
+            ${major}.${minor}.${patch}-bookworm
             ${major}.${minor}.${patch}
-            ${major}.${minor}-bullseye
+            ${major}.${minor}-bookworm
             ${major}.${minor}
             ${major}
             `;
@@ -111,7 +111,7 @@ jobs:
         uses: imjasonh/setup-crane@v0.3
 
       - name: Login to ECR Public in CRANE
-        run: crane auth login public.ecr.aws -u "${{ steps.login-ecr.outputs.docker_username_public_ecr_aws }}" -p "${{ steps.login-ecr.outputs.docker_password_public_ecr_aws }}"
+        run: crane auth login public.ecr.aws -u "${{ steps.login-ecr-public.outputs.docker_username_public_ecr_aws }}" -p "${{ steps.login-ecr-public.outputs.docker_password_public_ecr_aws }}"
 
       - name: Flatten images
         run: |

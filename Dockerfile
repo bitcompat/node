@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1.7
 
 ARG NODE_VERSION
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.11
 
-FROM bitnami/minideb:bullseye as node_build_base
+FROM bitnami/minideb:bookworm as node_build_base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG NODE_VERSION
@@ -50,7 +50,7 @@ RUN <<EOT bash
     find /opt/bitnami/node/lib/node_modules/ -name man -type d -print0 | xargs -0 rm -v -r
 EOT
 
-FROM bitnami/minideb:bullseye as stage-0
+FROM bitnami/minideb:bookworm as stage-0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DIRS_TO_TRIM="/usr/share/man \
@@ -67,17 +67,17 @@ ARG NODE_VERSION
 ARG TARGETARCH
 ENV APP_VERSION=$NODE_VERSION \
     BITNAMI_APP_NAME=node \
-    BITNAMI_IMAGE_VERSION="${NODE_VERSION}-prod-debian-11" \
+    BITNAMI_IMAGE_VERSION="${NODE_VERSION}-prod-debian-12" \
     PATH="/opt/bitnami/node/bin:/opt/bitnami/python/bin:$PATH" \
     LD_LIBRARY_PATH=/opt/bitnami/python/lib/ \
     OS_ARCH=$TARGETARCH \
-    OS_FLAVOUR="debian-11" \
+    OS_FLAVOUR="debian-12" \
     OS_NAME="linux"
 
 RUN <<EOT bash
     set -e
-    install_packages build-essential ca-certificates curl git libbz2-1.0 libcom-err2 libcrypt1 libffi7 libgcc-s1 libgssapi-krb5-2 libk5crypto3 \
-        libkeyutils1 libkrb5-3 libkrb5support0 liblzma5 libncursesw6 libnsl2 libreadline8 libsqlite3-0 libsqlite3-dev libssl-dev libssl1.1 \
+    install_packages build-essential ca-certificates curl git libbz2-1.0 libcom-err2 libcrypt1 libffi8 libgcc-s1 libgssapi-krb5-2 libk5crypto3 \
+        libkeyutils1 libkrb5-3 libkrb5support0 liblzma5 libncursesw6 libnsl2 libreadline8 libsqlite3-0 libsqlite3-dev libssl-dev \
         libstdc++6 libtinfo6 libtirpc3 pkg-config procps unzip wget zlib1g
 
     npm i -g node-gyp yarn
