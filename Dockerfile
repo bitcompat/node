@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 ARG NODE_VERSION
-ARG PYTHON_VERSION=3.11
+ARG PYTHON_VERSION=3.12
 
 FROM bitnami/minideb:bookworm as node_build_base
 
