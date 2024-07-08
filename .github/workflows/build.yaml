@@ -22,7 +22,7 @@ jobs:
           - version: 20.13.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
-          - version: 18.20.2 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 18.20.4 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
 
