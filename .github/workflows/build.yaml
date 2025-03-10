@@ -13,16 +13,13 @@ jobs:
     strategy:
       matrix:
         version:
-          - version: 22.4.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 22.14.0 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: true
             revision: 1
-          - version: 21.7.3 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
-            latest: false
-            revision: 2
-          - version: 20.15.1 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 20.18.3 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
-          - version: 18.20.4 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 18.20.7 # renovate: datasource=github-releases depName=nodejs/node extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
             revision: 1
 
@@ -85,7 +82,7 @@ jobs:
 
       - id: docker_meta
         name: Extract docker image metadata
-        uses: docker/metadata-action@v5.5.1
+        uses: docker/metadata-action@v5.7.0
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}

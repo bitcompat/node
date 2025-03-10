@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.8
+# syntax=docker/dockerfile:1.14
 
 ARG NODE_VERSION
 ARG PYTHON_VERSION=3.11
