@@ -45,10 +45,10 @@ jobs:
             const [ major, minor, patch ] = version.split('.').filter(V => '' !== V);
             
             return `
-            ${major}.${minor}.${patch}-bookworm-r${revision}
-            ${major}.${minor}.${patch}-bookworm
+            ${major}.${minor}.${patch}-trixie-r${revision}
+            ${major}.${minor}.${patch}-trixie
             ${major}.${minor}.${patch}
-            ${major}.${minor}-bookworm
+            ${major}.${minor}-trixie
             ${major}.${minor}
             ${major}
             `;

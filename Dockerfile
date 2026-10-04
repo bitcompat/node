@@ -3,7 +3,7 @@
 ARG NODE_VERSION
 ARG PYTHON_VERSION=3.11
 
-FROM bitnami/minideb:bookworm as node_build_base
+FROM bitnami/minideb:trixie as node_build_base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG NODE_VERSION
@@ -13,7 +13,7 @@ COPY --link prebuildfs/ /
 RUN mkdir -p /opt/blacksmith-sandbox
 RUN mkdir -p /opt/bitnami/node
 
-FROM public.ecr.aws/bitcompat/python:${PYTHON_VERSION} as python
+FROM public.ecr.aws/bitcompat/python:${PYTHON_VERSION}-trixie as python
 
 FROM node_build_base as node_build_amd64
 ADD --link https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz /opt/blacksmith-sandbox/node.tar.xz
@@ -50,7 +50,7 @@ RUN <<EOT bash
     find /opt/bitnami/node/lib/node_modules/ -name man -type d -prune -exec rm -v -r {} +
 EOT
 
-FROM bitnami/minideb:bookworm as stage-0
+FROM bitnami/minideb:trixie as stage-0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DIRS_TO_TRIM="/usr/share/man \
@@ -67,18 +67,18 @@ ARG NODE_VERSION
 ARG TARGETARCH
 ENV APP_VERSION=$NODE_VERSION \
     BITNAMI_APP_NAME=node \
-    BITNAMI_IMAGE_VERSION="${NODE_VERSION}-prod-debian-12" \
+    BITNAMI_IMAGE_VERSION="${NODE_VERSION}-prod-debian-13" \
     PATH="/opt/bitnami/node/bin:/opt/bitnami/python/bin:$PATH" \
     LD_LIBRARY_PATH=/opt/bitnami/python/lib/ \
     OS_ARCH=$TARGETARCH \
-    OS_FLAVOUR="debian-12" \
+    OS_FLAVOUR="debian-13" \
     OS_NAME="linux"
 
 RUN <<EOT bash
     set -e
     install_packages build-essential ca-certificates curl git libbz2-1.0 libcom-err2 libcrypt1 libffi8 libgcc-s1 libgssapi-krb5-2 libk5crypto3 \
-        libkeyutils1 libkrb5-3 libkrb5support0 liblzma5 libncursesw6 libnsl2 libreadline8 libsqlite3-0 libsqlite3-dev libssl-dev \
-        libstdc++6 libtinfo6 libtirpc3 pkg-config procps unzip wget zlib1g
+        libkeyutils1 libkrb5-3 libkrb5support0 liblzma5 libncursesw6 libnsl2 libreadline8t64 libsqlite3-0 libsqlite3-dev libssl-dev \
+        libstdc++6 libtinfo6 libtirpc3t64 pkg-config procps unzip wget zlib1g
 
     npm i -g node-gyp yarn
     rm -rf /root/.npm
