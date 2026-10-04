@@ -46,8 +46,8 @@ RUN <<EOT bash
       find \$DIR/ -delete -print
     done
 
-    find /opt/bitnami/node/lib/node_modules/ -name docs -type d -print0 | xargs -0 rm -v -r
-    find /opt/bitnami/node/lib/node_modules/ -name man -type d -print0 | xargs -0 rm -v -r
+    find /opt/bitnami/node/lib/node_modules/ -name docs -type d -prune -exec rm -v -r {} +
+    find /opt/bitnami/node/lib/node_modules/ -name man -type d -prune -exec rm -v -r {} +
 EOT
 
 FROM bitnami/minideb:bookworm as stage-0
@@ -88,7 +88,7 @@ RUN <<EOT bash
     done
     rm /var/cache/ldconfig/aux-cache
 
-    find /opt/bitnami/node/lib/node_modules/ -name docs -type d -print0 | xargs -0 rm -v -r
+    find /opt/bitnami/node/lib/node_modules/ -name docs -type d -prune -exec rm -v -r {} +
 
     mkdir -p /app
     mkdir -p /var/log/apt
